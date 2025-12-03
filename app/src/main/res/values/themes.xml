@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.EclipseReads" parent="Base.Theme.EclipseReads" />
+
+    <style name="Base.Theme.EclipseReads" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorSurface">@color/surface_color</item>
+        <item name="colorSurfaceContainerHigh">@color/surface_high</item>
+
+        <item name="android:colorBackground">@color/screen_background</item>
+
+
+    </style>
+
+</resources>

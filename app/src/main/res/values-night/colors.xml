@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="text_primary">#FFFFFFFF</color>
+    <color name="text_secondary">#B3FFFFFF</color>
+    <color name="text_hint">#80FFFFFF</color>
+    <color name="text_inverse">#FF000000</color>
+
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+
+    <color name="surface_color">#33FFFFFF</color>
+    <color name="surface_high">#4DFFFFFF</color>
+
+    <color name="screen_background">#2A2831</color>
+    <color name="bottom_nav_background">#211F26</color>
+    <color name="search_view_background">#2C2A33</color>
+
+    <color name="subtle_contrast_background">#0DFFFFFF</color> <!-- Branco com 5% de opacidade -->
+
+</resources>
