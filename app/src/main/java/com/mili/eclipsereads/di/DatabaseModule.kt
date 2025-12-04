@@ -21,7 +21,7 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "eclipse-reads-db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
@@ -47,4 +47,8 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideReadingProgressDao(appDatabase: AppDatabase) = appDatabase.readingProgressDao()
+
+    @Provides
+    @Singleton
+    fun provideDroppedBookDao(appDatabase: AppDatabase) = appDatabase.droppedBookDao()
 }

@@ -3,6 +3,7 @@ package com.mili.eclipsereads.data.local.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mili.eclipsereads.domain.models.Books
+import kotlinx.datetime.Instant
 import java.util.Date
 
 @Entity(tableName = "books")
@@ -24,7 +25,7 @@ fun BookEntity.toDomainModel(): Books = Books(
     cover = cover,
     synopsis = synopsis,
     book_file_path = book_file_path,
-    created_at = created_at
+    created_at = Instant.fromEpochMilliseconds(created_at.time)
 )
 
 fun Books.toEntity(): BookEntity = BookEntity(
@@ -34,5 +35,5 @@ fun Books.toEntity(): BookEntity = BookEntity(
     cover = cover,
     synopsis = synopsis,
     book_file_path = book_file_path,
-    created_at = created_at
+    created_at = Date(created_at.toEpochMilliseconds())
 )

@@ -9,8 +9,8 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
-import io.github.jan.supabase.realtime.Realtime
-import io.github.jan.supabase.storage.Storage
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.auth.auth
 import javax.inject.Singleton
 
 @Module
@@ -21,29 +21,23 @@ object SupabaseModule {
     @Singleton
     fun provideSupabaseClient(): SupabaseClient {
         return createSupabaseClient(
-            supabaseUrl = "",
-            supabaseKey = ""
+            supabaseUrl = BuildConfig.SUPABASE_URL,
+            supabaseKey = BuildConfig.SUPABASE_KEY
         ) {
             install(Auth)
             install(Postgrest)
-            install(Realtime)
-            install(Storage)
         }
     }
 
     @Provides
     @Singleton
-    fun provideSupabasePostgrest(client: SupabaseClient): Postgrest = client.postgrest
+    fun provideSupabaseAuth(client: SupabaseClient): Auth {
+        return client.auth
+    }
 
     @Provides
     @Singleton
-    fun provideSupabaseAuth(client: SupabaseClient): Auth = client.auth
-
-    @Provides
-    @Singleton
-    fun provideSupabaseRealtime(client: SupabaseClient): Realtime = client.realtime
-
-    @Provides
-    @Singleton
-    fun provideSupabaseStorage(client: SupabaseClient): Storage = client.storage
+    fun provideSupabasePostgrest(client: SupabaseClient): Postgrest {
+        return client.postgrest
+    }
 }

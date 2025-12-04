@@ -1,10 +1,11 @@
 package com.mili.eclipsereads.domain.models
 
-import java.util.Date
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ReadingProgress(
-    val progress_id: Int,
-    val reading_id: Int,
+    val progressId: Int,
+    val readingId: Int,
     val page: Int,
-    val created_at: Date
+    val createdAt: String
 )

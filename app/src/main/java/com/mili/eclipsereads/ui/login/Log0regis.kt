@@ -13,10 +13,8 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.mili.eclipsereads.R
 
-@AndroidEntryPointndridEntryPoint
 class Log0regis : AppCompatActivity() {
     private var mostrandoLogin = true
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +42,6 @@ class Log0regis : AppCompatActivity() {
         }
 
         animarBotoes(botaoLogin, botaoCadastro, mostrandoLogin)
-
 
         botaoCadastro?.setOnClickListener {
             if (mostrandoLogin) {
@@ -76,6 +73,7 @@ class Log0regis : AppCompatActivity() {
             }
         }
     }
+
     private fun animarBotoes(botaoLogin: Button, botaoCadastro: Button, mostrandoLogin: Boolean) {
         val anim = AnimationUtils.loadAnimation(this, R.anim.fade_tint)
 

@@ -2,6 +2,7 @@ package com.mili.eclipsereads.data.repository
 
 import com.mili.eclipsereads.data.remore.SupabaseAuthDataSource
 import io.github.jan.supabase.gotrue.user.User
+import io.github.jan.supabase.gotrue.user.UserSession
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
@@ -15,15 +16,15 @@ class AuthRepository @Inject constructor(
         authDataSource.getCurrentUserId()
 
     // GOOGLE
-    suspend fun signInWithGoogle(idToken: String): String? =
+    suspend fun signInWithGoogle(idToken: String): UserSession? =
         authDataSource.signInWithGoogle(idToken)
 
     // EMAIL / SENHA
-    suspend fun signInWithEmail(email: String, password: String): String? =
+    suspend fun signInWithEmail(email: String, password: String): UserSession? =
         authDataSource.signInWithEmail(email, password)
 
-    suspend fun signUpWithEmail(email: String, password: String): String? =
+    suspend fun signUpWithEmail(email: String, password: String): UserSession? =
         authDataSource.signUpWithEmail(email, password)
 
-    fun signOut() = authDataSource.signOut()
+    suspend fun signOut() = authDataSource.signOut()
 }

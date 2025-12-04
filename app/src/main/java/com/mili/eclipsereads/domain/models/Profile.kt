@@ -1,9 +1,12 @@
 package com.mili.eclipsereads.domain.models
 
-import java.util.Date
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Profile(
-    val profile_id: String,
-    val name: String,
-    val created_at: Date
+    val id: String,
+    val fullName: String,
+    val email: String? = null,
+    val avatarUrl: String? = null,
+    val createdAt: String
 )

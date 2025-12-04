@@ -3,6 +3,7 @@ package com.mili.eclipsereads.data.local.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mili.eclipsereads.domain.models.Review
+import kotlinx.datetime.Instant
 import java.util.Date
 
 @Entity(tableName = "reviews")
@@ -22,7 +23,7 @@ fun ReviewEntity.toDomainModel(): Review = Review(
     user_id = user_id,
     rating = rating,
     comment = comment,
-    created_at = created_at
+    created_at = Instant.fromEpochMilliseconds(created_at.time)
 )
 
 fun Review.toEntity(): ReviewEntity = ReviewEntity(
@@ -31,5 +32,5 @@ fun Review.toEntity(): ReviewEntity = ReviewEntity(
     user_id = user_id,
     rating = rating,
     comment = comment,
-    created_at = created_at
+    created_at = Date(created_at.toEpochMilliseconds())
 )

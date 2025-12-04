@@ -3,6 +3,7 @@ package com.mili.eclipsereads.data.local.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mili.eclipsereads.domain.models.ReadingProgress
+import kotlinx.datetime.Instant
 import java.util.Date
 
 @Entity(tableName = "reading_progress")
@@ -18,12 +19,12 @@ fun ReadingProgressEntity.toDomainModel(): ReadingProgress = ReadingProgress(
     progress_id = progress_id,
     reading_id = reading_id,
     page = page,
-    created_at = created_at
+    created_at = Instant.fromEpochMilliseconds(created_at.time)
 )
 
 fun ReadingProgress.toEntity(): ReadingProgressEntity = ReadingProgressEntity(
     progress_id = progress_id,
     reading_id = reading_id,
     page = page,
-    created_at = created_at
+    created_at = Date(created_at.toEpochMilliseconds())
 )

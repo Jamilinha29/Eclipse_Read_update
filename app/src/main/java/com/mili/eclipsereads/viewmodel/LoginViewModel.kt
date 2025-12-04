@@ -33,9 +33,9 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = LoginUiState.Loading
             try {
-                val token = authRepository.signInWithGoogle(idToken)
-                if (token != null) {
-                    tokenManager.saveToken(token)
+                val session = authRepository.signInWithGoogle(idToken)
+                if (session != null) {
+                    tokenManager.saveSession(session)
                     _uiState.value = LoginUiState.Success
                 } else {
                     _uiState.value = LoginUiState.Error(Exception("Google Sign-In failed"))
@@ -52,9 +52,9 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = LoginUiState.Loading
             try {
-                val token = authRepository.signInWithEmail(email, password)
-                if (token != null) {
-                    tokenManager.saveToken(token)
+                val session = authRepository.signInWithEmail(email, password)
+                if (session != null) {
+                    tokenManager.saveSession(session)
                     _uiState.value = LoginUiState.Success
                 } else {
                     _uiState.value = LoginUiState.Error(

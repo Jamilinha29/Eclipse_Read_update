@@ -14,4 +14,13 @@ interface ReviewsDao {
 
     @Query("SELECT * FROM reviews WHERE book_id = :bookId")
     fun getReviewsForBook(bookId: Int): Flow<List<ReviewEntity>>
+
+    @Query("DELETE FROM reviews WHERE review_id = :reviewId")
+    suspend fun deleteReview(reviewId: String)
+
+    @Query("UPDATE reviews SET rating = :rating, review_text = :reviewText WHERE review_id = :reviewId")
+    suspend fun updateReview(reviewId: String, rating: Int, reviewText: String)
+
+    @Query("DELETE FROM reviews WHERE book_id = :bookId")
+    suspend fun deleteAllForBook(bookId: Int)
 }

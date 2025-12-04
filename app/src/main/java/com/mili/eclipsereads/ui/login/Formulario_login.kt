@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +31,7 @@ import com.mili.eclipsereads.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class Formulario_login : Fragment() {
@@ -53,7 +53,7 @@ class Formulario_login : Fragment() {
                         loginViewModel.signInWithGoogle(idToken)
                     }
                 } catch (e: ApiException) {
-                    Log.w("Formulario_login", "Google sign in failed", e)
+                    Timber.w(e, "Google sign in failed")
                 }
             }
         }

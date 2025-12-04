@@ -13,4 +13,22 @@ class SupabaseReadingDataSource @Inject constructor(
             eq("user_id", userId)
         } }.decodeList<Reading>()
     }
+
+    suspend fun addReading(reading: Reading) {
+        postgrest.from("readings").insert(reading)
+    }
+
+    suspend fun removeReading(userId: String, bookId: Int) {
+        postgrest.from("readings").delete { filter {
+            eq("user_id", userId)
+            eq("book_id", bookId)
+        } }
+    }
+
+    suspend fun updateReadingProgress(userId: String, bookId: Int, progress: Int) {
+        postgrest.from("readings").update({ "progress" to progress }) { filter {
+            eq("user_id", userId)
+            eq("book_id", bookId)
+        } }
+    }
 }

@@ -3,6 +3,7 @@ package com.mili.eclipsereads.data.local.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mili.eclipsereads.domain.models.Favorite
+import kotlinx.datetime.Instant
 import java.util.Date
 
 @Entity(tableName = "favorites")
@@ -18,12 +19,12 @@ fun FavoriteEntity.toDomainModel(): Favorite = Favorite(
     favorite_id = favorite_id,
     user_id = user_id,
     book_id = book_id,
-    created_at = created_at
+    created_at = Instant.fromEpochMilliseconds(created_at.time)
 )
 
 fun Favorite.toEntity(): FavoriteEntity = FavoriteEntity(
     favorite_id = favorite_id,
     user_id = user_id,
     book_id = book_id,
-    created_at = created_at
+    created_at = Date(created_at.toEpochMilliseconds())
 )

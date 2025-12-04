@@ -14,4 +14,13 @@ interface ReadingDao {
 
     @Query("SELECT * FROM readings WHERE user_id = :userId")
     fun getReadingsForUser(userId: String): Flow<List<ReadingEntity>>
+
+    @Query("DELETE FROM readings WHERE user_id = :userId AND book_id = :bookId")
+    suspend fun deleteReading(userId: String, bookId: Int)
+
+    @Query("UPDATE readings SET progress = :progress WHERE user_id = :userId AND book_id = :bookId")
+    suspend fun updateReadingProgress(userId: String, bookId: Int, progress: Int)
+
+    @Query("DELETE FROM readings WHERE user_id = :userId")
+    suspend fun deleteAllForUser(userId: String)
 }

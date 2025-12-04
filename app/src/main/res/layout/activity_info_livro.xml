@@ -9,131 +9,63 @@
     tools:context=".ui.details.Info_livro">
 
     <ImageView
-        android:id="@+id/imageView10"
+        android:id="@+id/book_cover_detail"
         android:layout_width="132dp"
         android:layout_height="200dp"
         android:layout_marginTop="76dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/capa" />
-
-    <ImageView
-        android:id="@+id/imageView11"
-        android:layout_width="31dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintStart_toEndOf="@id/imageView10"
-        app:layout_constraintTop_toTopOf="@id/imageView10"
-        app:srcCompat="@drawable/estrela2" />
+        tools:srcCompat="@drawable/capa" />
 
     <TextView
-        android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="0.0"
-        android:textColor="@color/text_primary"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
-        app:layout_constraintStart_toEndOf="@+id/imageView11"
-        app:layout_constraintTop_toTopOf="@+id/imageView11" />
-
-    <TextView
-        android:id="@+id/textView19"
+        android:id="@+id/book_title_detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="por Jack London • 1907 • T. Werner Laurie"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:textAlignment="center"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:textColor="@color/text_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/book_cover_detail"
+        tools:text="Título do Livro Bem Grande" />
+
+    <TextView
+        android:id="@+id/book_author_detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:textAlignment="center"
         android:textColor="@color/text_primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+        app:layout_constraintEnd_toEndOf="@id/book_title_detail"
+        app:layout_constraintStart_toStartOf="@id/book_title_detail"
+        app:layout_constraintTop_toBottomOf="@id/book_title_detail"
+        tools:text="por Autor Famoso • 2024" />
 
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Páginas: 287"
-        android:textColor="@color/text_primary"
-        app:layout_constraintEnd_toStartOf="@+id/textView21"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView19" />
-
-    <TextView
-        android:id="@+id/textView21"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" Idioma: chi"
-        android:textColor="@color/text_primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView20"
-        app:layout_constraintTop_toTopOf="@+id/textView20" />
-
-    <Button
-        android:id="@+id/button14"
-        android:layout_width="wrap_content"
-        android:layout_height="47dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="#330404FF"
-        android:text="📖 Ficção"
-        android:textColor="@color/text_primary"
-        app:layout_constraintEnd_toStartOf="@+id/button15"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
-
-    <Button
-        android:id="@+id/button15"
-        android:layout_width="wrap_content"
-        android:layout_height="47dp"
-        android:backgroundTint="#4503FBED"
-        android:text="🚀 Sci-Fi"
-        android:textColor="@color/text_primary"
-        app:layout_constraintEnd_toStartOf="@+id/button16"
-        app:layout_constraintStart_toEndOf="@+id/button14"
-        app:layout_constraintTop_toTopOf="@+id/button14" />
-
-
-    <Button
-        android:id="@+id/button16"
-        android:layout_width="wrap_content"
-        android:layout_height="47dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="#62FF7800"
-        android:text="📜 História"
-        android:textColor="@color/text_primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button15"
-        app:layout_constraintTop_toTopOf="@+id/button15" />
 
     <ScrollView
         android:id="@+id/descriptionScrollView"
-        android:layout_width="375dp"
-        android:layout_height="86dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toTopOf="@+id/button17"
+        android:layout_marginBottom="16dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@id/button17"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button15">
+        app:layout_constraintTop_toBottomOf="@id/book_author_detail">
 
         <TextView
-            android:id="@+id/textView52"
+            android:id="@+id/book_description_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="The soft summer wind stirs the redwoods, and Wild-Water ripples sweet cadences over its mossy stones."
-            android:textColor="@color/text_primary" />
+            android:textColor="@color/text_primary"
+            tools:text="Descrição longa do livro... The soft summer wind stirs the redwoods, and Wild-Water ripples sweet cadences over its mossy stones. Uma descrição que pode ter várias linhas e precisa rolar para ser vista por completo." />
     </ScrollView>
 
     <Button
@@ -141,44 +73,55 @@
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="#6A3D89"
         android:text="@string/ler_agora"
         android:textColor="@color/text_primary"
+        app:layout_constraintBottom_toTopOf="@id/button18"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionScrollView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button18"
-
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#6A3D89"
         android:drawableStart="@drawable/estrela"
         android:text="@string/favoritar"
         android:textColor="@color/text_primary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button19"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button17"
-        app:layout_constraintVertical_bias="0.152" />
+        app:layout_constraintEnd_toStartOf="@id/button19"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button19"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="24dp"
         android:backgroundTint="#6A3D89"
         android:text="@string/lido"
         android:textColor="@color/text_primary"
+        app:layout_constraintBottom_toBottomOf="@id/button18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button18"
+        app:layout_constraintTop_toTopOf="@id/button18" />
+
+    <ProgressBar
+        android:id="@+id/loading_view"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button18"
-        app:layout_constraintTop_toBottomOf="@+id/button17"
-        app:layout_constraintVertical_bias="0.152" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,93 +5,72 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mili.eclipsereads.data.repository.BooksRepository
 import com.mili.eclipsereads.data.repository.FavoritesRepository
-import com.mili.eclipsereads.data.repository.AuthRepository
-import com.mili.eclipsereads.domain.models.Favorite
-import java.util.Date
+import com.mili.eclipsereads.data.repository.ReadingRepository
 import com.mili.eclipsereads.domain.models.Books
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed interface BookDetailsUiState {
-    data class Success(val books: Books) : BookDetailsUiState
-    data class Error(val exception: Throwable) : BookDetailsUiState
-    object Loading : BookDetailsUiState
-    object BookNotFound : BookDetailsUiState
-}
+data class BookDetailsUiState(
+    val book: Books? = null,
+    val isFavorite: Boolean = false,
+    val isInReadingList: Boolean = false,
+    val isLoading: Boolean = true,
+    val error: String? = null
+)
 
 @HiltViewModel
 class BookDetailsViewModel @Inject constructor(
     private val booksRepository: BooksRepository,
     private val favoritesRepository: FavoritesRepository,
-    private val authRepository: AuthRepository,
+    private val readingRepository: ReadingRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val bookId: Int = checkNotNull(savedStateHandle["bookId"])
-
-    private val _uiState = MutableStateFlow<BookDetailsUiState>(BookDetailsUiState.Loading)
+    private val _uiState = MutableStateFlow(BookDetailsUiState())
     val uiState: StateFlow<BookDetailsUiState> = _uiState.asStateFlow()
 
-    private val _isFavorite = MutableStateFlow(false)
-    val isFavorite: StateFlow<Boolean> = _isFavorite.asStateFlow()
+    private val bookId: Int = savedStateHandle.get<Int>("bookId")!!
+    private val userId: String = "" // TODO: Obter o ID do usuário logado
 
     init {
-        getBookDetails()
-        observeFavoriteState()
+        loadBookDetails()
     }
 
-    private fun getBookDetails() {
+    private fun loadBookDetails() {
         viewModelScope.launch {
-            _uiState.value = BookDetailsUiState.Loading
-            booksRepository.getBookById(bookId)
-                .catch { _uiState.value = BookDetailsUiState.Error(it) }
-                .collect { book ->
-                    if (book != null) {
-                        _uiState.value = BookDetailsUiState.Success(book)
-                    } else {
-                        _uiState.value = BookDetailsUiState.BookNotFound
-                    }
-                }
-        }
-    }
+            val bookFlow = booksRepository.getBookById(bookId)
+            val favoritesFlow = favoritesRepository.getFavoritesForUser(userId)
+            val readingFlow = readingRepository.getReadingsForUser(userId)
 
-    private fun observeFavoriteState() {
-        viewModelScope.launch {
-            val userId = authRepository.getCurrentUserId() ?: return@launch
-            // Keep collecting favorites for the current user and update local flag
-            favoritesRepository.getFavoritesForUser(userId)
-                .catch { /* ignore errors for state tracking */ }
-                .collect { favs ->
-                    _isFavorite.value = favs.any { it.book_id == bookId }
-                }
+            combine(bookFlow, favoritesFlow, readingFlow) { book, favorites, readings ->
+                BookDetailsUiState(
+                    book = book,
+                    isFavorite = favorites.any { it.bookId == bookId },
+                    isInReadingList = readings.any { it.bookId == bookId },
+                    isLoading = false
+                )
+            }.collect { state ->
+                _uiState.value = state
+            }
         }
     }
 
     fun toggleFavorite() {
         viewModelScope.launch {
-            val userId = authRepository.getCurrentUserId() ?: return@launch
-            try {
-                if (_isFavorite.value) {
-                    favoritesRepository.removeFavorite(userId, bookId)
-                } else {
-                    val favorite = Favorite(
-                        favorite_id = 0,
-                        user_id = userId,
-                        book_id = bookId,
-                        created_at = Date()
-                    )
-                    favoritesRepository.addFavorite(favorite)
+            if (_uiState.value.isFavorite) {
+                favoritesRepository.removeFavorite(userId, bookId)
+            } else {
+                _uiState.value.book?.let { 
+                    // TODO: Criar e passar um objeto Favorite completo
                 }
-                // Optimistically flip state; the collector on the flow will correct if needed
-                _isFavorite.value = !_isFavorite.value
-            } catch (e: Exception) {
-                _uiState.value = BookDetailsUiState.Error(e)
             }
         }
     }
+    
+    // TODO: Implementar add/remove da lista de leitura
 }

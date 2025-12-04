@@ -13,6 +13,7 @@ import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -21,34 +22,25 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.mili.eclipsereads.R
-import com.mili.eclipsereads.data.repository.AuthRepository
-import com.mili.eclipsereads.ui.login.Formulario_login
+import com.mili.eclipsereads.ui.login.Log0regis
 import com.mili.eclipsereads.viewmodel.ProfileUiState
 import com.mili.eclipsereads.viewmodel.ProfileViewModel
-import com.mili.eclipsereads.viewmodel.UserUiState
-import com.mili.eclipsereads.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class Perfil : Fragment() {
 
-    private val userViewModel: UserViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
-
-    @Inject
-    lateinit var authRepository: AuthRepository
 
     private lateinit var avatarImage: ShapeableImageView
     private lateinit var bannerImage: ImageView
-    private var isBannerSelected: Boolean = false
 
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-            result.data?.data?.let { saveAndLoadImage(it) }
+            result.data?.data?.let { uri -> profileViewModel.updateProfileImage(uri) }
         }
     }
 
@@ -64,28 +56,16 @@ class Perfil : Fragment() {
         avatarImage = view.findViewById(R.id.avatar_image)
         bannerImage = view.findViewById(R.id.banner_image)
 
-        avatarImage.setOnClickListener { isBannerSelected = false; openGallery() }
-        bannerImage.setOnClickListener { isBannerSelected = true; openGallery() }
+        avatarImage.setOnClickListener { openGallery() }
+        bannerImage.setOnClickListener { openGallery() } // A lógica para diferenciar banner/avatar precisará ser ajustada no ViewModel
 
-        observeUserState()
-        observeProfileState()
+        observeUiState()
+        observeNavigationEvents()
 
-        view.findViewById<Button>(R.id.button29).setOnClickListener { signOut() }
+        view.findViewById<Button>(R.id.button29).setOnClickListener { profileViewModel.signOut() }
     }
 
-    private fun observeUserState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                userViewModel.uiState.collect { state ->
-                    if (state is UserUiState.Success) {
-                        view?.findViewById<TextView>(R.id.textView24)?.text = state.user.email ?: ""
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeProfileState() {
+    private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 profileViewModel.uiState.collect { state ->
@@ -93,13 +73,18 @@ class Perfil : Fragment() {
                         is ProfileUiState.Success -> {
                             val profile = state.profile
                             view?.findViewById<TextView>(R.id.textView23)?.text = profile.fullName
-                            // TODO: Carregar estatísticas e imagens do perfil
-                            view?.findViewById<GridLayout>(R.id.stats_grid)?.visibility = View.GONE
+                            view?.findViewById<TextView>(R.id.textView24)?.text = profile.email
+                            Glide.with(this@Perfil).load(profile.avatarUrl).circleCrop().into(avatarImage)
+
+                            // Update stats
+                            view?.findViewById<TextView>(R.id.favoritos_count)?.text = state.favoritesCount.toString()
+                            view?.findViewById<TextView>(R.id.lendo_count)?.text = state.readingCount.toString()
+                            view?.findViewById<TextView>(R.id.dropados_count)?.text = state.droppedCount.toString()
+                            view?.findViewById<GridLayout>(R.id.stats_grid)?.isVisible = true
                         }
                         else -> {
-                            // NoProfile, Loading, ou Error
                             view?.findViewById<TextView>(R.id.textView23)?.text = "Usuário"
-                            view?.findViewById<GridLayout>(R.id.stats_grid)?.visibility = View.GONE
+                            view?.findViewById<GridLayout>(R.id.stats_grid)?.isVisible = false
                         }
                     }
                 }
@@ -107,24 +92,21 @@ class Perfil : Fragment() {
         }
     }
 
-    private fun signOut() {
-        lifecycleScope.launch {
-            authRepository.signOut()
-            val intent = Intent(requireActivity(), Formulario_login::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+    private fun observeNavigationEvents() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                profileViewModel.navigationEvent.collect { 
+                    val intent = Intent(requireActivity(), Log0regis::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                }
+            }
         }
     }
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         pickImageLauncher.launch(intent)
-    }
-
-    private fun saveAndLoadImage(uri: Uri) {
-        // TODO: Mover a lógica de upload para o ViewModel e Repository
-        val targetImageView = if (isBannerSelected) bannerImage else avatarImage
-        Glide.with(this).load(uri).into(targetImageView)
     }
 
     override fun onResume() {

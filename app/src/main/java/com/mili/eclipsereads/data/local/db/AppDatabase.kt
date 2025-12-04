@@ -14,9 +14,10 @@ import com.mili.eclipsereads.utils.DateConverter
         ProfileEntity::class,
         ReadingEntity::class,
         FavoriteEntity::class,
-        ReadingProgressEntity::class
+        ReadingProgressEntity::class,
+        DroppedBookEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class)
@@ -27,4 +28,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun readingDao(): ReadingDao
     abstract fun favoritesDao(): FavoritesDao
     abstract fun readingProgressDao(): ReadingProgressDao
+    abstract fun droppedBookDao(): DroppedBookDao
 }

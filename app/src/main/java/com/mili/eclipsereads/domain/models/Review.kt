@@ -1,12 +1,13 @@
 package com.mili.eclipsereads.domain.models
 
-import java.util.Date
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Review(
-    val review_id: Int,
-    val book_id: Int,
-    val user_id: String,
+    val reviewId: Int,
+    val bookId: Int,
+    val userId: String,
     val rating: Int,
     val comment: String? = null,
-    val created_at: Date
+    val createdAt: String
 )
